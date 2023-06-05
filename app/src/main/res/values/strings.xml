@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">fastdeliveries</string>
+    <string name="welcome_title">Olá, ficamos feliz em tê-lo aqui.</string>
+    <string name="welcome_subtitle">Escolha abaixo o que deseja fazer no aplicativo.</string>
+    <string name="button_track_order">Rastrear uma encomenda</string>
+    <string name="button_track_delivery">Acompanhar minhas entregas</string>
+    <string name="title_activity_main_collaborator">MainCollaboratorActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+</resources>

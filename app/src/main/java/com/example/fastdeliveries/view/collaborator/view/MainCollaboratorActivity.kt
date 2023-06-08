@@ -9,8 +9,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.fastdeliveries.R
 import com.example.fastdeliveries.databinding.ActivityMainCollaboratorBinding
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 
 class MainCollaboratorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainCollaboratorBinding
@@ -26,7 +24,7 @@ class MainCollaboratorActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main_collaborator)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.mapsFragment, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.mapsFragment, R.id.navigation_notifications
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

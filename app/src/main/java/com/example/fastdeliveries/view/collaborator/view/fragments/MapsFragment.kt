@@ -1,4 +1,4 @@
-package com.example.fastdeliveries.view.collaborator.view.ui
+package com.example.fastdeliveries.view.collaborator.view.fragments
 
 import android.content.res.Resources
 import android.os.Bundle

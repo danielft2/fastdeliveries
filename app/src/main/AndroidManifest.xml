@@ -15,27 +15,30 @@
         android:theme="@style/Theme.Fastdeliveries"
         tools:targetApi="31">
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${API_KEY}" />
+        <activity
+            android:name=".view.collaborator.view.DeliveryDetailsActivity"
+            android:exported="false" />
 
         <activity
             android:name=".view.collaborator.view.MainCollaboratorActivity"
             android:exported="false"
             android:label="@string/title_activity_main_collaborator" />
-
         <activity
             android:name=".view.collaborator.view.SigninActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${API_KEY}" />
 
         <meta-data
             android:name="preloaded_fonts"

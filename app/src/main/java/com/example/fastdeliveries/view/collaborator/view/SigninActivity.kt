@@ -10,7 +10,6 @@ import com.example.fastdeliveries.R
 import com.example.fastdeliveries.databinding.ActivitySigninBinding
 import com.example.fastdeliveries.view.collaborator.viewModel.SigninViewModel
 import com.example.fastdeliveries.view.constants.ErrorMessages
-import com.google.android.gms.maps.SupportMapFragment
 
 class SigninActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivitySigninBinding
@@ -30,7 +29,7 @@ class SigninActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         if (v.id === R.id.button_enter) {
-            var response  = viewModel.signin(
+            val response  = viewModel.signin(
                 binding.editCpf.text.toString(), binding.editPassword.text.toString()
             )
 

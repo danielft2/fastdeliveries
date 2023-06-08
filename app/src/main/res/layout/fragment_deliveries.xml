@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.collaborator.view.ui.DeliveriesFragment"
+    tools:context=".view.collaborator.view.fragments.DeliveriesFragment"
     android:padding="16dp"
     android:background="@color/gray_900">
 
@@ -12,7 +12,7 @@
         android:id="@+id/image_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo"
+        android:src="@drawable/img_logo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

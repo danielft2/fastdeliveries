@@ -54,7 +54,11 @@ class DeliveriesFragment : Fragment() {
 
     private fun observe() {
         deliveriesViewModel.deliveries.observe(viewLifecycleOwner) {
-            adpater.updateDeliveries(it)
+            if (it.isNotEmpty()) {
+                binding.recycleListDeliveries.visibility = View.VISIBLE
+                binding.layoutDeliveriesEmpty.visibility = View.GONE
+                adpater.updateDeliveries(it)
+            }
         }
     }
 }

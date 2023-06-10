@@ -2,6 +2,7 @@ package com.example.fastdeliveries.view.collaborator.repository
 
 import com.example.fastdeliveries.view.collaborator.database.AuthDatabase
 import com.example.fastdeliveries.view.collaborator.models.Collaborator
+import com.example.fastdeliveries.view.collaborator.services.ValidationResponse
 
 class AuthRepository private constructor() {
     private var authDatabase: AuthDatabase = AuthDatabase()
@@ -19,5 +20,9 @@ class AuthRepository private constructor() {
 
     fun signin(cpf: String, password: String): Collaborator? {
         return this.authDatabase.signin(cpf, password)
+    }
+
+    fun validateCredencials(cpf: String, password: String): ValidationResponse {
+        return authDatabase.validateCredencials(cpf, password)
     }
 }

@@ -1,4 +1,11 @@
 <resources>
+    <string name="CREDENCIALS_INVALID">CPF e/ou senha incorretas.</string>
+    <string name="FAILURE_SCANNER">Ocorreu um erro inesperado ao ler o QR code.</string>
+    <string name="QR_CODE_INVALID">Escanei um QR Code de uma entrega válida!</string>
+    <string name="CREATE_DELIVERY_SUCCESS">Entrega adicionada com sucesso!</string>
+    <string name="DELIVERY_ALREDY_EXISTS">Essa entrega já foi adicionada!</string>
+
+
     <string name="signin_subtitle">Informe abaixo suas credenciais abaixo.</string>
     <string name="signin_title">Bem vindo, colaborador.</string>
     <string name="label_cpf">CPF</string>

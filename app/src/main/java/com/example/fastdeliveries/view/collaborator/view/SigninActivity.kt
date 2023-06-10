@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.fastdeliveries.R
 import com.example.fastdeliveries.databinding.ActivitySigninBinding
 import com.example.fastdeliveries.view.collaborator.viewModel.SigninViewModel
-import com.example.fastdeliveries.view.constants.ErrorMessages
 
 class SigninActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivitySigninBinding
@@ -37,7 +36,7 @@ class SigninActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, MainCollaboratorActivity::class.java))
                 finish()
             } else {
-                Toast.makeText(this, ErrorMessages.MESSAGES.AUTH, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.CREDENCIALS_INVALID), Toast.LENGTH_SHORT).show()
             }
         }
     }

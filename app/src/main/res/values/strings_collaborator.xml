@@ -3,6 +3,7 @@
     <string name="FAILURE_SCANNER">Ocorreu um erro inesperado ao ler o QR code.</string>
     <string name="QR_CODE_INVALID">Escanei um QR Code de uma entrega válida!</string>
     <string name="CREATE_DELIVERY_SUCCESS">Entrega adicionada com sucesso!</string>
+    <string name="UPDATE_DELIVERY_SUCCESS">Entrega atualizada com sucesso!</string>
     <string name="DELIVERY_ALREDY_EXISTS">Essa entrega já foi adicionada!</string>
 
 
@@ -18,4 +19,6 @@
     <string name="lasts_updates_delivery">Ultimas atualizações</string>
     <string name="update_delivery">Atualizar Entrega</string>
     <string name="deliveries_empty">Você ainda não tem nenhuma entrega adicionada</string>
+    <string name="label_field_update_status">Status</string>
+    <string name="label_field_code_security">Código da entrega</string>
 </resources>

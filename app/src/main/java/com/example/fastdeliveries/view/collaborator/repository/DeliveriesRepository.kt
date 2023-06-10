@@ -1,8 +1,10 @@
 package com.example.fastdeliveries.view.collaborator.repository
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.example.fastdeliveries.R
 import com.example.fastdeliveries.view.collaborator.database.DeliveriesDatabase
+import com.example.fastdeliveries.view.collaborator.enums.DeliveryStatus
 import com.example.fastdeliveries.view.collaborator.models.Delivery
 import com.example.fastdeliveries.view.collaborator.models.LastUpdateDelivery
 import com.example.fastdeliveries.view.collaborator.models.Order
@@ -13,12 +15,16 @@ import com.google.gson.JsonParseException
 
 class DeliveriesRepository(val context: Context) {
     private var deliveriesDatabase: DeliveriesDatabase = DeliveriesDatabase();
-    private val gson = Gson();
+    private var authRepository: AuthRepository = AuthRepository.getInstance();
     private val authStoragePreferences = AuthStoragePreferences.getInstance(context);
+
+    private val gson = Gson();
     private var collaborator_id: Int = -1
+    private var collaborator_cpf: String = ""
 
     init {
         collaborator_id = authStoragePreferences.retrievePreference()?.id ?: -1
+        collaborator_cpf = authStoragePreferences.retrievePreference()?.cpf ?: ""
     }
 
     companion object {
@@ -55,6 +61,27 @@ class DeliveriesRepository(val context: Context) {
             else listener.onFailure(response.message())
         } catch (e: JsonParseException) {
             listener.onFailure(context.getString(R.string.QR_CODE_INVALID))
+        }
+    }
+
+    fun updateStatusDelivery(
+        id: Int,
+        cod_delivery: String,
+        password: String,
+        lastUpdateDelivery: LastUpdateDelivery,
+        listener: IAPIListener<Boolean>
+    ) {
+        if(password != "" && cod_delivery != "") {
+            val credencialsValidate = authRepository.validateCredencials(collaborator_cpf, password)
+            if (credencialsValidate.status()) {
+                val response = deliveriesDatabase.updateStatusDelivery(id, collaborator_id, cod_delivery, lastUpdateDelivery)
+                if (response.status()) listener.onResponse(true)
+                else listener.onFailure(response.message())
+            } else {
+                listener.onFailure(credencialsValidate.message())
+            }
+        } else {
+            listener.onFailure("Preencha todos os campos.")
         }
     }
 }

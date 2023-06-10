@@ -23,4 +23,10 @@
         <item name="colorPrimary">@color/gray_400</item>
         <item name="colorOnPrimary">@color/primary</item>
     </style>
+
+    <style name="Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="backgroundTint">@color/gray_800</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:paddingHorizontal">12dp</item>
+    </style>
 </resources>

@@ -2,6 +2,7 @@ package com.example.fastdeliveries.view.collaborator.database
 
 import android.util.Log
 import com.example.fastdeliveries.view.collaborator.enums.DeliveryStatus
+import com.example.fastdeliveries.view.collaborator.enums.DeliveryUpdate
 import com.example.fastdeliveries.view.collaborator.interfaces.IDeliveryDatabase
 import com.example.fastdeliveries.view.collaborator.models.Delivery
 import com.example.fastdeliveries.view.collaborator.models.LastUpdateDelivery
@@ -31,7 +32,6 @@ class DeliveriesDatabase: IDeliveryDatabase {
     }
 
     override fun createNewDelivery(order: Order, id_collaborator: Int): ValidationResponse {
-        Log.e("ORDER", order.toString())
         val deliveryAlreadyExists = getDeliveryByOrderId(order.id, id_collaborator)
 
         if (deliveryAlreadyExists != null) {
@@ -40,5 +40,27 @@ class DeliveriesDatabase: IDeliveryDatabase {
 
         deliveries.add(Delivery(countId++, "BR3838HDHE2", id_collaborator, order, DeliveryStatus.PENDENTE))
         return ValidationResponse()
+    }
+
+    override fun updateStatusDelivery(
+        id: Int,
+        id_collaborator: Int,
+        cod_delivery: String,
+        lastUpdateDelivery: LastUpdateDelivery
+    ): ValidationResponse {
+
+        val delivery = getDeliveryById(id, id_collaborator)
+        if (delivery != null) {
+            val index = deliveries.indexOf(delivery)
+            deliveries[index].lastsUpdates.add(lastUpdateDelivery)
+
+            if (lastUpdateDelivery.type == DeliveryUpdate.ENTREGUE_AO_DESTINATARIO) {
+                deliveries[index].status = DeliveryStatus.ENTREGUE
+            }
+
+            return ValidationResponse()
+        }
+
+        return ValidationResponse("Ocorreu um erro ao atualizar o status.")
     }
 }

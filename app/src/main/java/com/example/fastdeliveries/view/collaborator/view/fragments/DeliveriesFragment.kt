@@ -54,6 +54,11 @@ class DeliveriesFragment : Fragment(), OnClickListener {
         return binding.root
     }
 
+    override fun onStart() {
+        viewModel.getAllDeliveries()
+        super.onStart()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

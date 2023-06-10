@@ -1,5 +1,7 @@
 package com.example.fastdeliveries.view.collaborator.interfaces
 
+import com.example.fastdeliveries.view.collaborator.enums.DeliveryStatus
+import com.example.fastdeliveries.view.collaborator.enums.DeliveryUpdate
 import com.example.fastdeliveries.view.collaborator.models.Delivery
 import com.example.fastdeliveries.view.collaborator.models.LastUpdateDelivery
 import com.example.fastdeliveries.view.collaborator.models.Order
@@ -11,4 +13,10 @@ interface IDeliveryDatabase {
     fun getDeliveryByOrderId(id: Int, id_collaborator: Int): Delivery?
     fun getAllLastUpdateByDeliveryId(id: Int, id_collaborator: Int): List<LastUpdateDelivery>
     fun createNewDelivery(order: Order, id_collaborator: Int): ValidationResponse;
+    fun updateStatusDelivery(
+        id: Int,
+        id_collaborator: Int,
+        cod_delivery: String,
+        lastUpdateDelivery: LastUpdateDelivery
+    ): ValidationResponse
 }

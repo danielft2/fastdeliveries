@@ -5,23 +5,23 @@ import com.example.fastdeliveries.view.collaborator.enums.DeliveryUpdate
 import java.util.Date
 
 class Delivery(
-    var id: Int,
-    var code: String,
-    var collaborator_id: Int,
-    var recipient_name: String,
-    var adress: String,
-    var latitude: Number,
-    var logintude: Number,
-    var name_product: String,
-    var status: DeliveryStatus) {
+    val id: Int,
+    val code: String,
+    val collaborator_id: Int,
+    val order: Order,
+    val status: DeliveryStatus) {
 
-    val lastsUpdates: MutableList<LastUpdateDelivery> = mutableListOf();
+    val lastsUpdates: MutableList<LastUpdateDelivery> =
+        mutableListOf(LastUpdateDelivery(DeliveryUpdate.AGUARDANDO_MOVIMENTACAO, Date().toString()));
 
     fun getLastUpdate(): String {
         return lastsUpdates[0].type.toString()
     }
 
-    init {
-        lastsUpdates.add(LastUpdateDelivery(DeliveryUpdate.AGUARDANDO_MOVIMENTACAO, Date().toString()))
+    override fun toString(): String {
+        return "${id} - ${code} - ${collaborator_id} - ${order.recipient_name} - ${order.city} - ${order.adress} - " +
+                "${order.latitude} -" + "${order.longitude} - ${order.name_product} " +
+                "${order.expected_delivery_date} - ${status}"
     }
+
 }

@@ -14,7 +14,7 @@ class DeleveriesViewHolder(
 ) {
     fun bind(delivery: Delivery) {
         binding.codeProduct.text = delivery.code
-        binding.textLocation.text = delivery.adress
+        binding.textLocation.text = delivery.order.city
         binding.textLastUpdate.text = delivery.getLastUpdate()
         binding.textCodDelevery.text = delivery.id.toString()
         binding.imageIcon.setColorFilter(ContextCompat.getColor(itemView.context, getColorBind(delivery.status)))

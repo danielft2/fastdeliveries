@@ -43,24 +43,26 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
         binding.buttonBack.setOnClickListener(this)
     }
 
-    private fun observer() {
-        viewModel.lastsUpdates.observe(this) {
-            adpter.updateLastsUpdates(it)
-        }
-    }
-
     private fun loadData() {
         val bundle = intent.extras
         if (bundle != null) {
             val deliveryId = bundle.getInt(DeliveryConstants.PARAMS_DELIVERY_DETAILS.DELIVERY_ID)
             viewModel.getAllLastsUpdates(deliveryId)
+            viewModel.getDataDelivery(deliveryId)
+        }
+    }
 
-            val data = viewModel.getDataDelivery(deliveryId)
-            if (data != null) {
-                binding.textCodDelevery.text = data.code
-                binding.textAdressDelivery.text = data.adress
-                binding.textRecipientDelivery.text = data.recipient_name
-                binding.textNameProduct.text = data.name_product
+    private fun observer() {
+        viewModel.lastsUpdates.observe(this) {
+            adpter.updateLastsUpdates(it)
+        }
+
+        viewModel.deliveryData.observe(this) {
+            if (it != null) {
+                binding.textCodDelevery.text = it.code
+                binding.textAdressDelivery.text = it.order.city
+                binding.textRecipientDelivery.text = it.order.recipient_name
+                binding.textNameProduct.text = it.order.name_product
             }
         }
     }

@@ -10,23 +10,19 @@ import com.example.fastdeliveries.view.collaborator.repository.DeliveriesReposit
 import com.example.fastdeliveries.view.collaborator.storage.AuthStoragePreferences
 
 class DeliveryDetailsViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = DeliveriesRepository.getInstance();
-    private val authStoragePreferences = AuthStoragePreferences.getInstance(application.applicationContext);
-    private val collaborator = authStoragePreferences.retrievePreference();
+    private val repository = DeliveriesRepository.getInstance(application.applicationContext);
 
     private var listAllLastsUpdates = MutableLiveData<List<LastUpdateDelivery>>();
     val lastsUpdates: LiveData<List<LastUpdateDelivery>> = listAllLastsUpdates;
 
+    private val _deliveryData = MutableLiveData<Delivery>();
+    val deliveryData: LiveData<Delivery> = _deliveryData
+
     fun getAllLastsUpdates(id: Int) {
-        if (collaborator != null) {
-           listAllLastsUpdates.value = repository.getAllLastsUpdatesByDeliveryId(id, collaborator.id)
-        }
+        listAllLastsUpdates.value = repository.getAllLastsUpdatesByDeliveryId(id)
     }
 
-    fun getDataDelivery(id: Int): Delivery? {
-        if (collaborator != null) {
-            return repository.getDeliveryById(id, collaborator.id)
-        }
-        return null
+    fun getDataDelivery(id: Int) {
+        _deliveryData.value = repository.getDeliveryById(id)
     }
 }

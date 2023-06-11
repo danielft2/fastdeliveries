@@ -45,7 +45,6 @@ class DeliveriesDatabase: IDeliveryDatabase {
     override fun updateStatusDelivery(
         id: Int,
         id_collaborator: Int,
-        cod_delivery: String,
         lastUpdateDelivery: LastUpdateDelivery
     ): ValidationResponse {
 

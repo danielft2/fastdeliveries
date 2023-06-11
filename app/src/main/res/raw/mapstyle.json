@@ -11,7 +11,13 @@
     "elementType": "labels.icon",
     "stylers": [
       {
+        "color": "#000000"
+      },
+      {
         "visibility": "off"
+      },
+      {
+        "weight": 1.5
       }
     ]
   },
@@ -20,6 +26,9 @@
     "stylers": [
       {
         "color": "#757575"
+      },
+      {
+        "visibility": "on"
       }
     ]
   },
@@ -54,6 +63,15 @@
     "stylers": [
       {
         "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.locality",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "lightness": -30
       }
     ]
   },

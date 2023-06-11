@@ -66,15 +66,14 @@ class DeliveriesRepository(val context: Context) {
 
     fun updateStatusDelivery(
         id: Int,
-        cod_delivery: String,
         password: String,
         lastUpdateDelivery: LastUpdateDelivery,
         listener: IAPIListener<Boolean>
     ) {
-        if(password != "" && cod_delivery != "") {
+        if(password != "") {
             val credencialsValidate = authRepository.validateCredencials(collaborator_cpf, password)
             if (credencialsValidate.status()) {
-                val response = deliveriesDatabase.updateStatusDelivery(id, collaborator_id, cod_delivery, lastUpdateDelivery)
+                val response = deliveriesDatabase.updateStatusDelivery(id, collaborator_id, lastUpdateDelivery)
                 if (response.status()) listener.onResponse(true)
                 else listener.onFailure(response.message())
             } else {

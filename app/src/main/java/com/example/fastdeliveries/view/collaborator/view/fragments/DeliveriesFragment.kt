@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.example.fastdeliveries.view.collaborator.view.DeliveryDetailsActivity
 import com.example.fastdeliveries.view.collaborator.view.adapter.DeliveriesAdapter
 import com.example.fastdeliveries.view.collaborator.view.listeners.IDeliveryListener
 import com.example.fastdeliveries.view.collaborator.viewModel.DeliveriesViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
@@ -24,9 +26,10 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 class DeliveriesFragment : Fragment(), OnClickListener {
     private var _binding: FragmentDeliveriesBinding? = null
     private val binding get() = _binding!!
-    private val adpater: DeliveriesAdapter = DeliveriesAdapter()
-
     private lateinit var viewModel: DeliveriesViewModel
+
+    private val adpater: DeliveriesAdapter = DeliveriesAdapter()
+    private var toast: Toast? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
         viewModel = ViewModelProvider(this).get(DeliveriesViewModel::class.java)
@@ -59,6 +62,7 @@ class DeliveriesFragment : Fragment(), OnClickListener {
         super.onStart()
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -78,14 +82,16 @@ class DeliveriesFragment : Fragment(), OnClickListener {
             val delivery: String? = barcode.rawValue
             createNewDelivery(delivery)
         }?.addOnFailureListener {
-            Toast.makeText(context, getText(R.string.FAILURE_SCANNER), Toast.LENGTH_LONG).show()
+            showToast(getString(R.string.FAILURE_SCANNER))
         }
     }
 
     private fun createNewDelivery(orderJSON: String?) {
         if (orderJSON != null) viewModel.createNewDelivery(orderJSON)
-        else Toast.makeText(context, getString(R.string.QR_CODE_INVALID), Toast.LENGTH_LONG).show()
+        else showToast(getString(R.string.QR_CODE_INVALID))
     }
+
+    private fun showToast(message: String) { Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show() }
 
     private fun observe() {
         viewModel.deliveries.observe(viewLifecycleOwner) {
@@ -99,9 +105,9 @@ class DeliveriesFragment : Fragment(), OnClickListener {
         viewModel.createDelivery.observe(viewLifecycleOwner) {
             if (it.status()) {
                 viewModel.getAllDeliveries()
-                Toast.makeText(context, getString(R.string.CREATE_DELIVERY_SUCCESS), Toast.LENGTH_LONG).show()
+                showToast(getString(R.string.CREATE_DELIVERY_SUCCESS))
             } else {
-                Toast.makeText(context, it.message(), Toast.LENGTH_LONG).show()
+                showToast(it.message())
             }
         }
     }

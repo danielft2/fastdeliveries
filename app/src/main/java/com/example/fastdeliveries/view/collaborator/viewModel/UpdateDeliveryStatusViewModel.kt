@@ -16,14 +16,8 @@ class UpdateDeliveryStatusViewModel(application: Application) : AndroidViewModel
     private val _updateStatus = MutableLiveData<ValidationResponse>()
     val updateStatus : LiveData<ValidationResponse> = _updateStatus
 
-    fun updateStatusDelivery(
-        id: Int,
-        cod_delivery: String,
-        password: String,
-        lastUpdateDelivery: LastUpdateDelivery
-    ) {
-        Log.d("SENHA", password)
-        repository.updateStatusDelivery(id, cod_delivery, password, lastUpdateDelivery, object : IAPIListener<Boolean> {
+    fun updateStatusDelivery(id: Int, password: String, lastUpdateDelivery: LastUpdateDelivery) {
+        repository.updateStatusDelivery(id, password, lastUpdateDelivery, object : IAPIListener<Boolean> {
             override fun onResponse(result: Boolean) { _updateStatus.value = ValidationResponse() }
             override fun onFailure(result: String) { _updateStatus.value = ValidationResponse(result) }
         })

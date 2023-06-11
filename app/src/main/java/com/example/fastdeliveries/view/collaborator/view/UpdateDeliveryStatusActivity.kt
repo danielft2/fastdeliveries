@@ -41,7 +41,6 @@ class UpdateDeliveryStatusActivity : AppCompatActivity(), OnClickListener {
             R.id.button_confirm_update -> {
                 viewModel.updateStatusDelivery(
                     delivery_id,
-                    binding.editCodeSecurity.text.toString(),
                     binding.editPassword.text.toString(),
                     newLastUpdate(binding.spinnerStatusDelivery.selectedItemPosition)
                 )

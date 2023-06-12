@@ -4,6 +4,7 @@
     <string name="QR_CODE_INVALID">Escanei um QR Code de uma entrega válida!</string>
     <string name="CREATE_DELIVERY_SUCCESS">Entrega adicionada com sucesso!</string>
     <string name="UPDATE_DELIVERY_SUCCESS">Entrega atualizada com sucesso!</string>
+    <string name="DELETE_DELIVERY_SUCCESS">Entrega deletada com sucesso!</string>
     <string name="DELIVERY_ALREDY_EXISTS">Essa entrega já foi adicionada!</string>
 
 

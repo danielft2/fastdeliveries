@@ -7,7 +7,6 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,6 +61,10 @@ class DeliveriesFragment : Fragment(), OnClickListener {
         super.onStart()
     }
 
+    override fun onResume() {
+        viewModel.getAllDeliveries()
+        super.onResume()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -82,32 +85,35 @@ class DeliveriesFragment : Fragment(), OnClickListener {
             val delivery: String? = barcode.rawValue
             createNewDelivery(delivery)
         }?.addOnFailureListener {
-            showToast(getString(R.string.FAILURE_SCANNER))
+            showSnackbar(getString(R.string.FAILURE_SCANNER))
         }
     }
 
     private fun createNewDelivery(orderJSON: String?) {
         if (orderJSON != null) viewModel.createNewDelivery(orderJSON)
-        else showToast(getString(R.string.QR_CODE_INVALID))
+        else showSnackbar(getString(R.string.QR_CODE_INVALID))
     }
 
-    private fun showToast(message: String) { Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show() }
+    private fun showSnackbar(message: String) { Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show() }
 
     private fun observe() {
         viewModel.deliveries.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 binding.recycleListDeliveries.visibility = View.VISIBLE
                 binding.layoutDeliveriesEmpty.visibility = View.GONE
-                adpater.updateDeliveries(it)
+                adpater.updateDeliveries(it.reversed())
+            } else {
+                binding.recycleListDeliveries.visibility = View.GONE
+                binding.layoutDeliveriesEmpty.visibility = View.VISIBLE
             }
         }
 
         viewModel.createDelivery.observe(viewLifecycleOwner) {
             if (it.status()) {
                 viewModel.getAllDeliveries()
-                showToast(getString(R.string.CREATE_DELIVERY_SUCCESS))
+                showSnackbar(getString(R.string.CREATE_DELIVERY_SUCCESS))
             } else {
-                showToast(it.message())
+                showSnackbar(it.message())
             }
         }
     }

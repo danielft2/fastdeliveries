@@ -42,6 +42,16 @@ class DeliveriesDatabase: IDeliveryDatabase {
         return ValidationResponse()
     }
 
+    override fun deleteDelivery(id: Int, id_collaborator: Int): ValidationResponse {
+        val delivery = getDeliveryById(id, id_collaborator)
+        if (delivery != null) {
+            deliveries.remove(delivery)
+            return ValidationResponse()
+        }
+
+        return ValidationResponse("Essa entrega não existe ou não foi cadastrada.")
+    }
+
     override fun updateStatusDelivery(
         id: Int,
         id_collaborator: Int,

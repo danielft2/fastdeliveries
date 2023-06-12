@@ -13,6 +13,7 @@ interface IDeliveryDatabase {
     fun getDeliveryByOrderId(id: Int, id_collaborator: Int): Delivery?
     fun getAllLastUpdateByDeliveryId(id: Int, id_collaborator: Int): List<LastUpdateDelivery>
     fun createNewDelivery(order: Order, id_collaborator: Int): ValidationResponse;
+    fun deleteDelivery(id: Int, id_collaborator: Int): ValidationResponse
     fun updateStatusDelivery(
         id: Int,
         id_collaborator: Int,

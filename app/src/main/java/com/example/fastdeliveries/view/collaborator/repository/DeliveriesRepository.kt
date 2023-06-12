@@ -64,6 +64,12 @@ class DeliveriesRepository(val context: Context) {
         }
     }
 
+    fun deleteDelivery(id: Int, listener: IAPIListener<Boolean>) {
+        val response = deliveriesDatabase.deleteDelivery(id, collaborator_id)
+        if (response.status()) listener.onResponse(true)
+        else listener.onFailure(response.message())
+    }
+
     fun updateStatusDelivery(
         id: Int,
         password: String,

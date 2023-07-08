@@ -7,8 +7,5 @@ enum class DeliveryStatus(val value: String) {
     PENDENTE("Pendente"),
 
     @SerializedName("1")
-    ENTREGUE("Entregue"),
-
-    @SerializedName("2")
-    CANCELADA("Cancelada"),
+    ENTREGUE("Entregue")
 }

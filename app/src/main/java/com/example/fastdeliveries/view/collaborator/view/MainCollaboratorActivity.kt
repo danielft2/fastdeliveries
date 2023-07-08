@@ -9,7 +9,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.fastdeliveries.R
 import com.example.fastdeliveries.databinding.ActivityMainCollaboratorBinding
-
 class MainCollaboratorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainCollaboratorBinding
 

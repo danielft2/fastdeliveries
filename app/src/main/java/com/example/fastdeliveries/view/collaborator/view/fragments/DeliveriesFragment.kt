@@ -7,6 +7,8 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,9 +20,7 @@ import com.example.fastdeliveries.view.collaborator.view.adapter.DeliveriesAdapt
 import com.example.fastdeliveries.view.collaborator.view.listeners.IDeliveryListener
 import com.example.fastdeliveries.view.collaborator.viewModel.DeliveriesViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.google.zxing.integration.android.IntentIntegrator
 
 class DeliveriesFragment : Fragment(), OnClickListener {
     private var _binding: FragmentDeliveriesBinding? = null
@@ -78,16 +78,21 @@ class DeliveriesFragment : Fragment(), OnClickListener {
     }
 
     private fun qrCodeScanner() {
-        val options = GmsBarcodeScannerOptions.Builder().setBarcodeFormats(Barcode.FORMAT_QR_CODE).build()
-        val scanner = context?.let { GmsBarcodeScanning.getClient(it, options) }
-        scanner?.startScan()
-        ?.addOnSuccessListener { barcode ->
-            val delivery: String? = barcode.rawValue
-            createNewDelivery(delivery)
-        }?.addOnFailureListener {
-            showSnackbar(getString(R.string.FAILURE_SCANNER))
+        val scanner = IntentIntegrator.forSupportFragment(this)
+        scanner.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+        scanner.setPrompt(getString(R.string.QR_CODE_INSTRUCTION))
+        zxingActivityResultLauncher.launch(scanner.createScanIntent())
+    }
+
+    private val zxingActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result: ActivityResult ->
+        val intentResult = IntentIntegrator.parseActivityResult(result.resultCode, result.data)
+
+        if(intentResult.contents != null) {
+            createNewDelivery(intentResult.contents)
         }
     }
+
 
     private fun createNewDelivery(orderJSON: String?) {
         if (orderJSON != null) viewModel.createNewDelivery(orderJSON)

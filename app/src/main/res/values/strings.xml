@@ -9,4 +9,5 @@
     <string name="title_deliveries">Notifications</string>
     <string name="button_back">voltar</string>
     <string name="button_confirm">Confirmar</string>
+    <string name="QR_CODE_INSTRUCTION">Escanei a encomenda</string>
 </resources>

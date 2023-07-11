@@ -1,4 +1,4 @@
-package com.example.fastdeliveries.view.collaborator.services
+package com.example.fastdeliveries.view.collaborator.viewModel.services
 
 class ValidationResponse(message: String = "") {
     private var status: Boolean = true

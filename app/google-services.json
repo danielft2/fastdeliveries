@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "322833164447",
+    "project_id": "fastapp-5b6b4",
+    "storage_bucket": "fastapp-5b6b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322833164447:android:14262d49f7af8be2e45aaa",
+        "android_client_info": {
+          "package_name": "com.example.fastdeliveries"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322833164447-kcso4bbf8s1ro38bqkthnffba8b1d7ev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzJLZMUY3ZKwvFczQ0eTrJWb0OcnY1GEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322833164447-kcso4bbf8s1ro38bqkthnffba8b1d7ev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

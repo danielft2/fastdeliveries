@@ -1,8 +1,11 @@
 package com.example.fastdeliveries.view.collaborator.repository
 
+import android.util.Log
 import com.example.fastdeliveries.view.collaborator.database.AuthDatabase
 import com.example.fastdeliveries.view.collaborator.models.Collaborator
-import com.example.fastdeliveries.view.collaborator.services.ValidationResponse
+import com.example.fastdeliveries.view.collaborator.viewModel.services.AppError
+import com.example.fastdeliveries.view.collaborator.viewModel.services.ValidationResponse
+
 
 class AuthRepository private constructor() {
     private var authDatabase: AuthDatabase = AuthDatabase()
@@ -18,11 +21,14 @@ class AuthRepository private constructor() {
         }
     }
 
-    fun signin(cpf: String, password: String): Collaborator? {
-        return this.authDatabase.signin(cpf, password)
+    suspend fun signin(cpf: String, password: String): Collaborator? {
+        return try {
+            val collaborator = this.authDatabase.signin(cpf, password);
+            collaborator
+        } catch (e: AppError) {
+            Log.e("error", e.message.toString());
+            null
+        }
     }
 
-    fun validateCredencials(cpf: String, password: String): ValidationResponse {
-        return authDatabase.validateCredencials(cpf, password)
-    }
 }

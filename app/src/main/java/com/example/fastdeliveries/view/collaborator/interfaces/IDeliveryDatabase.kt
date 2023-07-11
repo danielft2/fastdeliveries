@@ -5,18 +5,14 @@ import com.example.fastdeliveries.view.collaborator.enums.DeliveryUpdate
 import com.example.fastdeliveries.view.collaborator.models.Delivery
 import com.example.fastdeliveries.view.collaborator.models.LastUpdateDelivery
 import com.example.fastdeliveries.view.collaborator.models.Order
-import com.example.fastdeliveries.view.collaborator.services.ValidationResponse
+import com.example.fastdeliveries.view.collaborator.viewModel.services.ValidationResponse
 
 interface IDeliveryDatabase {
-    fun getAllByCollaborator(id: Int): List<Delivery>;
-    fun getDeliveryById(id: Int, id_collaborator: Int): Delivery?;
-    fun getDeliveryByOrderId(id: Int, id_collaborator: Int): Delivery?
-    fun getAllLastUpdateByDeliveryId(id: Int, id_collaborator: Int): List<LastUpdateDelivery>
-    fun createNewDelivery(order: Order, id_collaborator: Int): ValidationResponse;
-    fun deleteDelivery(id: Int, id_collaborator: Int): ValidationResponse
-    fun updateStatusDelivery(
-        id: Int,
-        id_collaborator: Int,
-        lastUpdateDelivery: LastUpdateDelivery
-    ): ValidationResponse
+    suspend fun getAllByCollaborator(id: String, isUpdates: Boolean): List<Delivery>;
+    suspend fun getDeliveryById(id: String): Delivery;
+    suspend fun getDeliveryByOrderId(id: String): Delivery?
+    suspend fun getAllLastUpdateByDeliveryId(id: String): List<LastUpdateDelivery>
+    suspend fun createNewDelivery(order: Order);
+    suspend fun deleteDelivery(id: String)
+    suspend fun updateStatusDelivery(id: String, deliveryUpdate: DeliveryUpdate)
 }

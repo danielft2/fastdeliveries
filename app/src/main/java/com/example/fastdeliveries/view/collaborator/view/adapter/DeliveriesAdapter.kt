@@ -1,36 +1,38 @@
 package com.example.fastdeliveries.view.collaborator.view.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fastdeliveries.databinding.RowDeleveryBinding
 import com.example.fastdeliveries.view.collaborator.models.Delivery
 import com.example.fastdeliveries.view.collaborator.view.listeners.IDeliveryListener
-import com.example.fastdeliveries.view.collaborator.view.viewholder.DeleveriesViewHolder
+import com.example.fastdeliveries.view.collaborator.view.viewholder.DeliveriesViewHolder
 
-class DeliveriesAdapter : RecyclerView.Adapter<DeleveriesViewHolder>() {
-    private var deliveriesList: List<Delivery> = listOf();
-    private lateinit var listener: IDeliveryListener;
+class DeliveriesAdapter : RecyclerView.Adapter<DeliveriesViewHolder>() {
+    private var deliveriesList: List<Delivery> = listOf()
+    private lateinit var listener: IDeliveryListener
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeleveriesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeliveriesViewHolder {
         val item = RowDeleveryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DeleveriesViewHolder(item, listener)
+        return DeliveriesViewHolder(item, listener)
     }
 
     override fun getItemCount(): Int {
         return deliveriesList.count()
     }
 
-    override fun onBindViewHolder(holder: DeleveriesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DeliveriesViewHolder, position: Int) {
         holder.bind(deliveriesList[position])
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateDeliveries(list: List<Delivery>) {
-        deliveriesList = list;
-        notifyDataSetChanged();
+        deliveriesList = list
+        notifyDataSetChanged()
     }
 
-    fun setDeliveryListerner(deliveryListerner: IDeliveryListener) {
-        listener = deliveryListerner
+    fun setDeliveryListener(deliveryListener: IDeliveryListener) {
+        listener = deliveryListener
     }
 }

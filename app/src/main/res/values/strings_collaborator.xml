@@ -1,5 +1,6 @@
 <resources>
     <string name="CREDENCIALS_INVALID">CPF e/ou senha incorretas.</string>
+    <string name="LIST_LAST_UPDATES_FAILED">Ocorreu um erro inesperado ao carregaso histórico de atualizações.</string>
     <string name="FAILURE_SCANNER">Ocorreu um erro inesperado ao ler o QR code.</string>
     <string name="QR_CODE_INVALID">Escanei um QR Code de uma entrega válida!</string>
     <string name="CREATE_DELIVERY_SUCCESS">Entrega adicionada com sucesso!</string>
@@ -22,4 +23,6 @@
     <string name="deliveries_empty">Você ainda não tem nenhuma entrega adicionada</string>
     <string name="label_field_update_status">Status</string>
     <string name="label_field_code_security">Código da entrega</string>
+    <string name="dialog_title_delete_delivery">Confirmar exclusão.</string>
+    <string name="dialog_message_delete_delivery">Tem certeza que deseja excluir a entrega?</string>
 </resources>

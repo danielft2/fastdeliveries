@@ -16,13 +16,10 @@ import com.example.fastdeliveries.databinding.ActivityUpdateDeliveryStatusBindin
 import com.example.fastdeliveries.view.collaborator.constants.DeliveryConstants
 import com.example.fastdeliveries.view.collaborator.enums.DeliveryStatus
 import com.example.fastdeliveries.view.collaborator.enums.DeliveryUpdate
-import com.example.fastdeliveries.view.collaborator.models.LastUpdateDelivery
 import com.example.fastdeliveries.view.collaborator.view.adapter.LastsUpdatesAdpter
 import com.example.fastdeliveries.view.collaborator.viewModel.DeliveryDetailsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
     private lateinit var binding: ActivityDeliveryDetailsBinding
@@ -31,13 +28,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
     private lateinit var dialog: BottomSheetDialog
 
     private val adpter = LastsUpdatesAdpter()
-    private var lastDeliveryClicked: Int = -1
+    private var lastDeliveryClicked: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDeliveryDetailsBinding.inflate(layoutInflater)
         sheetUpdateBiding = ActivityUpdateDeliveryStatusBinding.inflate(layoutInflater, null, false)
-        viewModel = ViewModelProvider(this).get(DeliveryDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[DeliveryDetailsViewModel::class.java]
 
         dialog = BottomSheetDialog(this, R.style.BottomSheetDialog).apply {
             window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MODE_CHANGED)
@@ -53,9 +50,11 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
             R.id.button_update_delivery -> { showSheetUpdateDelivery() }
             R.id.button_delete_delivery -> {
                 AlertDialog.Builder(this)
-                    .setTitle("Confirmar exclusão.")
-                    .setMessage("Tem certeza que deseja excluir a entrega?")
+                    .setTitle(getString(R.string.dialog_title_delete_delivery))
+                    .setMessage(getString(R.string.dialog_message_delete_delivery))
                     .setPositiveButton("Sim") { dialog, wich ->
+                        binding.progressDetails.visibility = View.VISIBLE
+                        binding.progressDetails.setBackgroundColor(ContextCompat.getColor(this, R.color.black_transparent))
                         viewModel.deleteDelivery(lastDeliveryClicked)
                     }
                     .create()
@@ -65,7 +64,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
                 viewModel.updateStatusDelivery(
                     lastDeliveryClicked,
                     sheetUpdateBiding.editPassword.text.toString(),
-                    getStatusOfUpdate(sheetUpdateBiding.spinnerStatusDelivery.selectedItem.toString())
+                    getStatusOfUpdate(sheetUpdateBiding.spinnerStatusDelivery.selectedItem.toString())!!
                 )
                 dialog.dismiss()
             }
@@ -83,18 +82,18 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
         listeners()
     }
 
-    private fun loadDataOfDelivery() {
+     private fun loadDataOfDelivery() {
         val bundle = intent.extras
         if (bundle != null) {
-            val deliveryId = bundle.getInt(DeliveryConstants.PARAMS_DELIVERY_DETAILS.DELIVERY_ID)
-            lastDeliveryClicked = deliveryId
-            viewModel.getAllLastsUpdates(deliveryId)
-            viewModel.getDataDelivery(deliveryId)
+            val deliveryId = bundle.getString(DeliveryConstants.PARAMS_DELIVERY_DETAILS.DELIVERY_ID)
+            lastDeliveryClicked = deliveryId!!
+            viewModel.getAllLastsUpdates(deliveryId.toString())
+            viewModel.getDataDelivery(deliveryId.toString())
         }
     }
 
     private fun loadDataSpinnerStatus() {
-        val range = DeliveryUpdate.values().count() - 1;
+        val range = DeliveryUpdate.values().count() - 1
         val list = DeliveryUpdate.values().slice(1..range) .map { it.value  }
         val adapter = ArrayAdapter(this, R.layout.spinner_item, list)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
@@ -109,22 +108,28 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
 
     private fun observer() {
         viewModel.lastsUpdates.observe(this) {
-            adpter.updateLastsUpdates(it.reversed())
+            if (it == null) showSnackbar(getString(R.string.LIST_LAST_UPDATES_FAILED))
+            else adpter.updateLastsUpdates(it.reversed())
         }
 
         viewModel.deliveryData.observe(this) {
             if (it != null) {
                 binding.textCodDelevery.text = it.code
-                binding.textCityDelivery.text = it.order.city
-                binding.textAdressDelivery.text = it.order.adress
-                binding.textRecipientDelivery.text = it.order.recipient_name
-                binding.textNameProduct.text = it.order.name_product
+                binding.textCityDelivery.text = it.city
+                binding.textAdressDelivery.text = it.adress
+                binding.textRecipientDelivery.text = it.recipient_name
+                binding.textNameProduct.text = it.name_product
                 isDeliveryCompleted(it.status)
+
+
+                binding.progressDetails.visibility = View.GONE;
+                binding.layoutDetails.visibility = View.VISIBLE;
             }
         }
 
         viewModel.deleteDelivery.observe(this) {
             if (it.status()) {
+                binding.progressDetails.visibility = View.GONE
                 showSnackbar(getString(R.string.DELETE_DELIVERY_SUCCESS))
                 finish()
             } else {
@@ -141,6 +146,15 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
                 showSnackbar(it.message())
             }
         }
+
+        viewModel.loading.observe(this) {
+            if (it.status()) {
+                binding.progressDetails.visibility = View.VISIBLE
+                binding.progressDetails.setBackgroundColor(ContextCompat.getColor(this, R.color.black_transparent))
+            } else {
+                binding.progressDetails.visibility = View.GONE
+            }
+        }
     }
 
     private fun showSnackbar(message: String) { Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show() }
@@ -154,11 +168,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), OnClickListener {
         dialog.show()
     }
 
-    private fun getStatusOfUpdate(value: String): LastUpdateDelivery {
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy, hh:mm:ss a")
-
-        val type = DeliveryUpdate.values().find { it.value === value }
-        return LastUpdateDelivery(type!!, LocalDateTime.now().format(formatter).toString())
+    private fun getStatusOfUpdate(value: String): DeliveryUpdate? {
+        return DeliveryUpdate.values().find { it.value === value }
     }
 
     private fun isDeliveryCompleted(deliveryStatus: DeliveryStatus) {

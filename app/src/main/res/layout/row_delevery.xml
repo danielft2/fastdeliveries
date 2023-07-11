@@ -58,19 +58,6 @@
             android:textSize="12sp"
             android:textColor="@color/gray_400"
             android:layout_below="@id/text_location" />
-
-        <TextView
-            android:id="@+id/text_cod_delevery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:fontFamily="@font/poppins"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            android:layout_toEndOf="@id/text_last_update"
-            android:gravity="end"
-            android:layout_alignTop="@id/text_last_update"
-            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,4 +26,8 @@
     <style name="Spinner" parent="Widget.AppCompat.Spinner">
         <item name="backgroundTint">@color/white</item>
     </style>
+
+    <style name="CustomProgressBarTheme">
+        <item name="colorAccent">@color/primary</item>
+    </style>
 </resources>

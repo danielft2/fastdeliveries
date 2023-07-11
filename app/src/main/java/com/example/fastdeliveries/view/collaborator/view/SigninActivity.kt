@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.fastdeliveries.R
 import com.example.fastdeliveries.databinding.ActivitySigninBinding
 import com.example.fastdeliveries.view.collaborator.viewModel.SigninViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class SigninActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivitySigninBinding
@@ -21,27 +22,32 @@ class SigninActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(SigninViewModel::class.java)
+        viewModel = ViewModelProvider(this)[SigninViewModel::class.java]
 
-        setOnClickEvents()
+        binding.buttonEnter.setOnClickListener(this)
+        observers();
     }
 
     override fun onClick(v: View) {
         if (v.id === R.id.button_enter) {
-            val response  = viewModel.signin(
+            viewModel.signin(
                 binding.editCpf.text.toString(), binding.editPassword.text.toString()
             )
 
-            if (response) {
-                startActivity(Intent(this, MainCollaboratorActivity::class.java))
-                finish()
-            } else {
-                Toast.makeText(this, getString(R.string.CREDENCIALS_INVALID), Toast.LENGTH_SHORT).show()
-            }
+
+        } else {
+            Toast.makeText(this, getString(R.string.CREDENCIALS_INVALID), Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun setOnClickEvents() {
-        binding.buttonEnter.setOnClickListener(this)
+    private fun observers() {
+        viewModel.signinResponse.observe(this) {
+            if (it.status()) {
+                startActivity(Intent(this, MainCollaboratorActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(this, it.message(), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

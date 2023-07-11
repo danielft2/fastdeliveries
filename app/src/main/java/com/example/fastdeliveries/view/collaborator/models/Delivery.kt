@@ -7,14 +7,19 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 class Delivery(
-    var id: Int,
-    var code: String,
-    var collaborator_id: Int,
-    var order: Order,
-    var status: DeliveryStatus) {
+    var id: String? = "",
+    var order_id: String = "",
+    var code: String = "",
+    val name_product: String = "",
+    val recipient_name: String = "",
+    val expected_delivery_date: String = "",
+    val city: String = "",
+    val adress: String = "",
+    val latitude: String = "",
+    val longitude: String = "",
+    var status: DeliveryStatus = DeliveryStatus.PENDENTE) {
 
-    val lastsUpdates: MutableList<LastUpdateDelivery> =
-        mutableListOf(LastUpdateDelivery(DeliveryUpdate.AGUARDANDO_MOVIMENTACAO, getDateFormatter()));
+    var lastsUpdates: List<LastUpdateDelivery> = mutableListOf();
 
     fun getLastUpdate(): String {
         return lastsUpdates[lastsUpdates.count() - 1].type.value
@@ -27,8 +32,8 @@ class Delivery(
 
 
     override fun toString(): String {
-        return "${id} - ${code} - ${collaborator_id} - ${order.recipient_name} - ${order.city} - ${order.adress} - " +
-                "${order.latitude} -" + "${order.longitude} - ${order.name_product} " +
-                "${order.expected_delivery_date} - ${status}"
+        return "${id} - ${order_id} - ${code} - ${recipient_name} - ${city} - ${adress} - " +
+                "${latitude} -" + "${longitude} - ${name_product} " +
+                "${expected_delivery_date} - ${status}"
     }
 }

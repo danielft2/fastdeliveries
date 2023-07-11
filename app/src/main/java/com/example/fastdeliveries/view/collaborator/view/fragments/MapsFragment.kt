@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.fastdeliveries.R
 import com.example.fastdeliveries.view.collaborator.constants.DeliveryConstants
+import com.example.fastdeliveries.view.collaborator.enums.DeliveryStatus
 import com.example.fastdeliveries.view.collaborator.models.Delivery
 import com.example.fastdeliveries.view.collaborator.view.DeliveryDetailsActivity
 import com.example.fastdeliveries.view.collaborator.viewModel.MapsViewModel
@@ -21,14 +22,16 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 
 class MapsFragment : Fragment(), OnInfoWindowClickListener {
     private lateinit var viewModel: MapsViewModel
-    private lateinit var gM: GoogleMap;
+    private var gM: GoogleMap? = null
     private var deliveries: List<Delivery> = listOf()
+    private var markers: MutableList<Marker> = mutableListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View? {
-        viewModel = ViewModelProvider(this).get(MapsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MapsViewModel::class.java]
         viewModel.getAllDeliveries()
         observe()
 
@@ -41,11 +44,6 @@ class MapsFragment : Fragment(), OnInfoWindowClickListener {
         mapFragment?.getMapAsync(callback)
     }
 
-    override fun onStart() {
-        viewModel.getAllDeliveries()
-        super.onStart()
-    }
-
     override fun onResume() {
         viewModel.getAllDeliveries()
         super.onResume()
@@ -53,31 +51,60 @@ class MapsFragment : Fragment(), OnInfoWindowClickListener {
 
     override fun onInfoWindowClick(marker: Marker) {
         val delivery = deliveries.find {
-            marker.position == LatLng(it.order.latitude.toDouble(), it.order.longitude.toDouble())
+            marker.position == LatLng(it.latitude.toDouble(), it.longitude.toDouble())
         }
 
         val intent = Intent(context, DeliveryDetailsActivity::class.java)
         val bundle = Bundle()
-        bundle.putInt(DeliveryConstants.PARAMS_DELIVERY_DETAILS.DELIVERY_ID, delivery!!.id)
+        bundle.putString(DeliveryConstants.PARAMS_DELIVERY_DETAILS.DELIVERY_ID, delivery!!.id.toString())
         intent.putExtras(bundle)
         startActivity(intent)
     }
 
     private val callback = OnMapReadyCallback { googleMap ->
         gM = googleMap
-        gM.setOnInfoWindowClickListener(this)
+        gM!!.setOnInfoWindowClickListener(this)
 
-        val brazil = LatLng(-8.75790319408473, -56.105726273406376);
+        val brazil = LatLng(-8.75790319408473, -56.105726273406376)
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(brazil))
 
-        viewModel.markerPoints(gM)
+        markerPoints()
 
         try {
-            gM.setMapStyle(context?.let { MapStyleOptions.loadRawResourceStyle(it, R.raw.mapstyle) })
+            gM!!.setMapStyle(context?.let { MapStyleOptions.loadRawResourceStyle(it, R.raw.mapstyle) })
         } catch (_: Resources.NotFoundException) { }
     }
 
+    private fun markerPoints() {
+        gM?.clear();
+        markers.clear();
+
+        if (deliveries.isNotEmpty()) {
+            for (delivery in deliveries) {
+                val point = LatLng(delivery.latitude.toDouble(), delivery.longitude.toDouble())
+                if (delivery.status === DeliveryStatus.PENDENTE) {
+                    val marker = gM?.addMarker(
+                        MarkerOptions()
+                            .position(point)
+                            .snippet("${delivery.recipient_name} \n ${delivery.expected_delivery_date}")
+                            .title("${delivery.name_product} - ${delivery.code}"))
+
+                    if (marker != null) {
+                        markers.add(marker)
+                    }
+                } else {
+                    val marker = markers.find { it.position == point }
+                    val index = markers.indexOf(marker)
+                    if (index >= 0) markers[index].remove()
+                }
+            }
+        }
+    }
+
     private fun observe() {
-        viewModel.allDeliveries.observe(viewLifecycleOwner) { deliveries = it }
+        viewModel.allDeliveries.observe(viewLifecycleOwner) {
+            deliveries = it
+            if (gM != null) markerPoints()
+        }
     }
 }
